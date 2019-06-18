@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DataBaseOrders.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="DataBaseOrdersStoreContainer">
+    <EntitySet Name="Orders" EntityType="DataBaseOrders.Store.Orders" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Users" EntityType="DataBaseOrders.Store.Users" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="OrdersLines" EntityType="DataBaseOrders.Store.OrdersLines" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Products" EntityType="DataBaseOrders.Store.Products" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="UsersOrders" Association="DataBaseOrders.Store.UsersOrders">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="ProductOrderLine" Association="DataBaseOrders.Store.ProductOrderLine">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="OrderLine" EntitySet="OrdersLines" />
+    </AssociationSet>
+    <AssociationSet Name="OrderOrderLine" Association="DataBaseOrders.Store.OrderOrderLine">
+      <End Role="Order" EntitySet="Orders" />
+      <End Role="OrderLine" EntitySet="OrdersLines" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Orders">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+    <Property Name="ModifiedOn" Type="datetime" Nullable="false" />
+    <Property Name="User_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="255" />
+    <Property Name="Gender" Type="bit" Nullable="false" />
+    <Property Name="DateOfBird" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="OrdersLines">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Price" Type="decimal" Nullable="false" />
+    <Property Name="Quantity" Type="int" Nullable="false" />
+    <Property Name="Product_Id" Type="int" Nullable="false" />
+    <Property Name="Order_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Products">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="45" />
+    <Property Name="Description" Type="nvarchar" Nullable="false" MaxLength="45" />
+  </EntityType>
+  <Association Name="UsersOrders">
+    <End Role="Users" Type="DataBaseOrders.Store.Users" Multiplicity="1" />
+    <End Role="Orders" Type="DataBaseOrders.Store.Orders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="User_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ProductOrderLine">
+    <End Role="Product" Type="DataBaseOrders.Store.Products" Multiplicity="1" />
+    <End Role="OrderLine" Type="DataBaseOrders.Store.OrdersLines" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OrderLine">
+        <PropertyRef Name="Product_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="OrderOrderLine">
+    <End Role="Order" Type="DataBaseOrders.Store.Orders" Multiplicity="1" />
+    <End Role="OrderLine" Type="DataBaseOrders.Store.OrdersLines" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Order">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OrderLine">
+        <PropertyRef Name="Order_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="DataBaseOrders" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+  <EntityContainer Name="DataBaseOrdersContainer" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Orders" EntityType="DataBaseOrders.Order" />
+    <EntitySet Name="Users" EntityType="DataBaseOrders.User" />
+    <EntitySet Name="OrdersLines" EntityType="DataBaseOrders.OrderLine" />
+    <EntitySet Name="Products" EntityType="DataBaseOrders.Product" />
+    <AssociationSet Name="UsersOrders" Association="DataBaseOrders.UsersOrders">
+      <End EntitySet="Users" Role="Users" />
+      <End EntitySet="Orders" Role="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="ProductOrderLine" Association="DataBaseOrders.ProductOrderLine">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="OrderLine" EntitySet="OrdersLines" />
+    </AssociationSet>
+    <AssociationSet Name="OrderOrderLine" Association="DataBaseOrders.OrderOrderLine">
+      <End Role="Order" EntitySet="Orders" />
+      <End Role="OrderLine" EntitySet="OrdersLines" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Order">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CreatedOn" Type="DateTime" Nullable="false" />
+    <Property Name="ModifiedOn" Type="DateTime" Nullable="false" />
+    <NavigationProperty Name="User" Relationship="DataBaseOrders.UsersOrders" FromRole="Orders" ToRole="Users" />
+    <NavigationProperty Name="OrderLine" Relationship="DataBaseOrders.OrderOrderLine" FromRole="Order" ToRole="OrderLine" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" FixedLength="false" MaxLength="255" />
+    <Property Name="Gender" Type="Boolean" Nullable="false" />
+    <Property Name="DateOfBird" Type="DateTime" Nullable="false" />
+    <NavigationProperty Name="Orders" Relationship="DataBaseOrders.UsersOrders" FromRole="Users" ToRole="Orders" />
+  </EntityType>
+  <EntityType Name="OrderLine">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Price" Type="Decimal" Nullable="false" />
+    <Property Name="Quantity" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Product" Relationship="DataBaseOrders.ProductOrderLine" FromRole="OrderLine" ToRole="Product" />
+    <NavigationProperty Name="Order" Relationship="DataBaseOrders.OrderOrderLine" FromRole="OrderLine" ToRole="Order" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="45" />
+    <Property Name="Description" Type="String" Nullable="false" MaxLength="45" />
+    <NavigationProperty Name="OrdersLines" Relationship="DataBaseOrders.ProductOrderLine" FromRole="Product" ToRole="OrderLine" />
+  </EntityType>
+  <Association Name="UsersOrders">
+    <End Type="DataBaseOrders.User" Multiplicity="1" Role="Users" />
+    <End Type="DataBaseOrders.Order" Multiplicity="*" Role="Orders" />
+  </Association>
+  <Association Name="ProductOrderLine">
+    <End Type="DataBaseOrders.Product" Role="Product" Multiplicity="1" />
+    <End Type="DataBaseOrders.OrderLine" Role="OrderLine" Multiplicity="*" />
+  </Association>
+  <Association Name="OrderOrderLine">
+    <End Type="DataBaseOrders.Order" Role="Order" Multiplicity="1" />
+    <End Type="DataBaseOrders.OrderLine" Role="OrderLine" Multiplicity="*" />
+  </Association>
+</Schema>

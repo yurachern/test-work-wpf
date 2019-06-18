@@ -1,0 +1,55 @@
+﻿<Window x:Class="TestWork.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TestWork"
+        xmlns:model="clr-namespace:TestWork.Model"
+        xmlns:helpes="clr-namespace:TestWork.Helpes"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"       
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"      
+        WindowStartupLocation="CenterScreen"       
+>
+    <Window.Resources>
+        <helpes:DateFormatConverter x:Key="dateFormatConverter"/>
+    </Window.Resources>
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Заказы" TextAlignment="Center"/>
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Records}" SelectedItem="{Binding SelectedRecord}" AutoGenerateColumns="False" SelectionMode="Single" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="Auto" Binding="{Binding OrderNumber}" Header="Номер заказа"/>
+                <DataGridTextColumn Width="Auto" Binding="{Binding User}" Header="Клиент"/>
+                <DataGridTextColumn Width="Auto" Binding="{Binding LineQuantity}" Header="Количество позиций"/>
+                <DataGridTextColumn Width="Auto" Binding="{Binding Sum}" Header="Сумма"/>
+                <DataGridTextColumn Width="Auto" Binding="{Binding Created, Converter={StaticResource dateFormatConverter}}" Header="Создан"/>
+                <DataGridTextColumn Width="Auto" Binding="{Binding Modified, Converter={StaticResource dateFormatConverter}}" Header="Изменен"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <GridSplitter Grid.RowSpan="2" Grid.Column="1" HorizontalAlignment="Center" Width="3"/>
+        <TextBlock Grid.Column="2" Text="{Binding SelectedRecord.OrderNumber, StringFormat=Товары (Заказ №{0})}" TextAlignment="Center"/>
+        <DataGrid Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="2" AutoGenerateColumns="False" SelectionMode="Single" IsReadOnly="True" ItemsSource="{Binding RecordsInfos}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="Auto" Binding="{Binding Product}" Header="Товар"/>
+                <DataGridTextColumn Width="Auto" Binding="{Binding Price}" Header="Цена"/>
+                <DataGridTextColumn Width="Auto" Binding="{Binding Quantity}" Header="Количество"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>
